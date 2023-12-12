@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
-import { Paper, Button } from '@mui/material';
+import { PrimaryButton, Stack, Text } from '@fluentui/react';
+
 
 function ProcessImage() {
   const [image, setImage] = useState(null);
@@ -49,7 +50,7 @@ function ProcessImage() {
   };
 
   return (
-    <div style={{ padding: '20px' }}>
+    <Stack tokens={{ childrenGap: 20 }} padding={20}>
       <input
         type="file"
         accept="image/*"
@@ -57,18 +58,29 @@ function ProcessImage() {
         ref={fileInputRef}
         onChange={handleFileSelect}
       />
-      <Paper
-        variant="outlined"
+      <Stack
+        horizontalAlign="center"
+        verticalAlign="center"
+        styles={{
+          root: {
+            width: '100%',
+            minHeight: '200px',
+            border: '1px solid #ccc',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            cursor: 'pointer'
+          }
+        }}
         onDragOver={handleDragOver}
         onDrop={handleDrop}
-        style={{ width: '100%', minHeight: '200px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}
         onClick={handleClick}
       >
-        ドラッグアンドドロップ、またはタップして画像をアップロード
-      </Paper>
-      <canvas ref={canvasRef} style={{ marginTop: 20, maxWidth: '100%' }} />
-    </div>
-  );
+        <Text>ドラッグアンドドロップ、またはタップして画像をアップロード</Text>
+      </Stack>
+      <canvas ref={canvasRef} style={{ maxWidth: '100%' }} />
+    </Stack>
+  ); 
 }
 
 export default ProcessImage;
