@@ -1,12 +1,13 @@
 import logo from './logo.svg';
 import './App.css';
 import { useState, useEffect } from 'react';
+import Inference from './Inference';
+import ProcessImage from './ProcessImage';
 
 function App() {
   const [isReady, setIsReady] = useState(false);
 
   const { cv } = window;
-  console.log(cv)
 
   useEffect(() => {
     if(cv){
@@ -20,20 +21,7 @@ function App() {
 
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <ProcessImage/>
       <div>
         <h1> OpenCV.js with React</h1>
         {isReady ? <p>OpenCV is ready to use! </p>: <p>Loading OpenCV ...</p>}
