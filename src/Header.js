@@ -6,7 +6,6 @@ const useStyles = makeStyles({
   header: {
     backgroundColor: '#4a90e2', // 例として青色を設定
     color: 'white', // テキスト色を白に設定
-    padding: '30px',
     textAlign: 'center',
     height: '50px',
   },

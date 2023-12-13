@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react';
 import Inference from './Inference';
 import ProcessImage from './ProcessImage';
 import Header from './Header';
+import ShowState from './ShowState';
+import { StateProvider } from './StateContext';
 
 function App() {
   const [isReady, setIsReady] = useState(false);
@@ -11,7 +13,7 @@ function App() {
   const { cv } = window;
 
   useEffect(() => {
-    if(cv){
+    if (cv) {
       cv['onRuntimeInitialized'] = () => {
         console.log('OpenCV Ready');
         setIsReady(true);
@@ -23,11 +25,10 @@ function App() {
   return (
     <div className="App">
       <Header />
-      <ProcessImage/>
-      <div>
-        <h1> OpenCV.js with React</h1>
-        {isReady ? <p>OpenCV is ready to use! </p>: <p>Loading OpenCV ...</p>}
-      </div>
+      <StateProvider >
+        <ShowState />
+        <ProcessImage />
+      </StateProvider>
     </div>
   );
 }
