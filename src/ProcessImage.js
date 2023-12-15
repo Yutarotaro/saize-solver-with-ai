@@ -63,6 +63,13 @@ function ProcessImage() {
         ctx.lineTo(redCirclePos.x, redCirclePos.y); // x = 200, y = 200 まで線を描画
 
 
+      //中心線
+      ctx.moveTo((redCirclePos.x + blueCirclePos.x)/2, (redCirclePos.y + blueCirclePos.y)/2); // x = 50, y = 50 の位置に移動
+      // 直線の終了点
+      ctx.lineTo((yellowCirclePos.x + greenCirclePos.x)/2, (yellowCirclePos.y + greenCirclePos.y)/2); // x = 200, y = 200 まで線を描画
+
+
+
 
         // 線のスタイル設定
         ctx.lineWidth = 5;
