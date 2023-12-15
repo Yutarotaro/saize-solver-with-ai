@@ -7,22 +7,23 @@ class Circle {
 }
 
 function ProcessImage() {
+  const width = 1000;
   const [image, setImage] = useState(null);
   const canvasRef = useRef(null);
   const fileInputRef = useRef(null);
 
   const { activeState, setActiveState } = useStateContext();
 
-  const [redCirclePos, setRedCirclePos] = useState({ x: 100, y: 100 });
+  const [redCirclePos, setRedCirclePos] = useState({ x: width / 10, y: width / 10 });
   const [isRedDragging, setIsRedDragging] = useState(false);
 
-  const [blueCirclePos, setBlueCirclePos] = useState({ x: 2000 - 100, y: 100 });
+  const [blueCirclePos, setBlueCirclePos] = useState({ x: 9 * width / 10, y: width / 10 });
   const [isBlueDragging, setIsBlueDragging] = useState(false);
 
-  const [greenCirclePos, setGreenCirclePos] = useState({ x: 2000 - 100, y: 1000 });
+  const [greenCirclePos, setGreenCirclePos] = useState({ x: 9 * width / 10, y: width / 2 });
   const [isGreenDragging, setIsGreenDragging] = useState(false);
 
-  const [yellowCirclePos, setYellowCirclePos] = useState({ x: 100, y: 1000 });
+  const [yellowCirclePos, setYellowCirclePos] = useState({ x: width / 10, y: width / 2 });
   const [isYellowDragging, setIsYellowDragging] = useState(false);
 
 
@@ -75,7 +76,7 @@ function ProcessImage() {
   const drawCircle = (context, x, y, color) => {
     context.fillStyle = color;
     context.beginPath();
-    context.arc(x, y, 10, 0, 2 * Math.PI);
+    context.arc(x, y, width / 200, 0, 2 * Math.PI);
     context.fill();
   };
 
@@ -200,13 +201,15 @@ function ProcessImage() {
             <Text>ドラッグアンドドロップ、またはタップして画像をアップロード</Text>
           </Stack>
         )}
-        <canvas
-          width={2000}
-          ref={canvasRef}
-          onMouseDown={handleMouseDown}
-          onMouseMove={handleMouseMove}
-          onMouseUp={handleMouseUp}
-          style={{ maxWidth: '100%' }} />
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
+          <canvas
+            width={width}
+            ref={canvasRef}
+            onMouseDown={handleMouseDown}
+            onMouseMove={handleMouseMove}
+            onMouseUp={handleMouseUp}
+            style={{ maxWidth: '100%' }} />
+        </div>
       </Stack>
     </div>
   );
