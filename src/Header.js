@@ -10,7 +10,8 @@ const useStyles = makeStyles({
     height: '50px',
   },
   headerText: {
-    fontsize: '44px'
+    fontWeight: 'bold',
+    fontSize: '44px'
   }
 });
 

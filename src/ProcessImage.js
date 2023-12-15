@@ -2,6 +2,10 @@ import { useState, useRef, useEffect } from 'react';
 import { PrimaryButton, Stack, Text, canUseDOM } from '@fluentui/react';
 import { useStateContext } from './StateContext'; // StateContextのインポート
 
+class Circle {
+
+}
+
 function ProcessImage() {
   const [image, setImage] = useState(null);
   const canvasRef = useRef(null);
@@ -9,41 +13,67 @@ function ProcessImage() {
 
   const { activeState, setActiveState } = useStateContext();
 
-  const [circlePos, setCirclePos] = useState({ x: 100, y: 100 });
-  const [isDragging, setIsDragging] = useState(false);
+  const [redCirclePos, setRedCirclePos] = useState({ x: 100, y: 100 });
+  const [isRedDragging, setIsRedDragging] = useState(false);
+
+  const [blueCirclePos, setBlueCirclePos] = useState({ x: 2000 - 100, y: 100 });
+  const [isBlueDragging, setIsBlueDragging] = useState(false);
+
+  const [greenCirclePos, setGreenCirclePos] = useState({ x: 2000 - 100, y: 1000 });
+  const [isGreenDragging, setIsGreenDragging] = useState(false);
+
+  const [yellowCirclePos, setYellowCirclePos] = useState({ x: 100, y: 1000 });
+  const [isYellowDragging, setIsYellowDragging] = useState(false);
 
 
-
+  // 画像の読み込みと表示
   useEffect(() => {
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext('2d');
-
     if (image) {
       const img = new Image();
+      const canvas = canvasRef.current;
+      const ctx = canvas.getContext('2d');
       img.onload = () => {
-        // 画像のアスペクト比に基づいてCanvasの高さを計算
         const aspectRatio = img.height / img.width;
         const canvasHeight = canvas.width * aspectRatio;
-  
-        // Canvasの高さを動的に設定
         canvas.height = canvasHeight;
-  
-        // 画像をリサイズして描画
         ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
         setActiveState(2);
-        drawCircle(ctx, circlePos.x, circlePos.y); // ここで円を描画
+        drawCircle(ctx, redCirclePos.x, redCirclePos.y, 'red'); // ここで円を描画
+        drawCircle(ctx, blueCirclePos.x, blueCirclePos.y, 'blue'); // ここで円を描画
+        drawCircle(ctx, greenCirclePos.x, greenCirclePos.y, 'green'); // ここで円を描画
+        drawCircle(ctx, yellowCirclePos.x, yellowCirclePos.y, 'yellow'); // ここで円を描画
+
+        // 直線の開始点
+        ctx.beginPath();
+        ctx.moveTo(redCirclePos.x, redCirclePos.y); // x = 50, y = 50 の位置に移動
+        // 直線の終了点
+        ctx.lineTo(blueCirclePos.x, blueCirclePos.y); // x = 200, y = 200 まで線を描画
+
+        ctx.moveTo(blueCirclePos.x, blueCirclePos.y); // x = 50, y = 50 の位置に移動
+        // 直線の終了点
+        ctx.lineTo(greenCirclePos.x, greenCirclePos.y); // x = 200, y = 200 まで線を描画
+
+        ctx.moveTo(greenCirclePos.x, greenCirclePos.y); // x = 50, y = 50 の位置に移動
+        // 直線の終了点
+        ctx.lineTo(yellowCirclePos.x, yellowCirclePos.y); // x = 200, y = 200 まで線を描画
+
+        ctx.moveTo(yellowCirclePos.x, yellowCirclePos.y); // x = 50, y = 50 の位置に移動
+        // 直線の終了点
+        ctx.lineTo(redCirclePos.x, redCirclePos.y); // x = 200, y = 200 まで線を描画
+
+
+
+        // 線のスタイル設定
+        ctx.lineWidth = 5;
+        ctx.strokeStyle = '#000000'; // 黒色で描画
+        ctx.stroke(); // 線を描画
       };
-
       img.src = image;
-    } else {
-      canvas.height = 1000;
-      // drawCircle(ctx, circlePos.x, circlePos.y); // ここで円を描画
     }
-  }, [image, circlePos]); // circlePosを依存関係に追加
+  }, [image, redCirclePos, blueCirclePos, greenCirclePos, yellowCirclePos]);
 
-  // 丸の描画
-  const drawCircle = (context, x, y) => {
-    context.fillStyle = 'blue';
+  const drawCircle = (context, x, y, color) => {
+    context.fillStyle = color;
     context.beginPath();
     context.arc(x, y, 10, 0, 2 * Math.PI);
     context.fill();
@@ -81,45 +111,61 @@ function ProcessImage() {
   const handleMouseDown = (e) => {
     const canvas = canvasRef.current;
     const rect = canvas.getBoundingClientRect();
-  
+
     // 実際の表示サイズと属性で設定されたサイズの比率を計算
     const scaleX = canvas.width / rect.width;
     const scaleY = canvas.height / rect.height;
-  
+
     // マウスの座標をCanvasのスケールに合わせて調整
     const x = (e.clientX - rect.left) * scaleX;
     const y = (e.clientY - rect.top) * scaleY;
-  
+
     // 円の範囲内かどうかをチェック（円の中心からの距離を計算）
-    const distance = Math.sqrt(Math.pow(x - circlePos.x, 2) + Math.pow(y - circlePos.y, 2));
-  
+    const redDistance = Math.sqrt(Math.pow(x - redCirclePos.x, 2) + Math.pow(y - redCirclePos.y, 2));
+    const blueDistance = Math.sqrt(Math.pow(x - blueCirclePos.x, 2) + Math.pow(y - blueCirclePos.y, 2));
+    const greenDistance = Math.sqrt(Math.pow(x - greenCirclePos.x, 2) + Math.pow(y - greenCirclePos.y, 2));
+    const yellowDistance = Math.sqrt(Math.pow(x - yellowCirclePos.x, 2) + Math.pow(y - yellowCirclePos.y, 2));
+
     // 円の半径（ここでは10としている）以内かどうかを判定
-    if (distance < 10) {
-      setIsDragging(true);
+    if (redDistance < 10) {
+      setIsRedDragging(true);
+    } else if (blueDistance < 10) {
+      setIsBlueDragging(true);
+    } else if (greenDistance < 10) {
+      setIsGreenDragging(true);
+    } else if (yellowDistance < 10) {
+      setIsYellowDragging(true);
     }
+
   };
-  
+
 
   const handleMouseMove = (e) => {
-    if (isDragging) {
-      const canvas = canvasRef.current;
-      const rect = canvas.getBoundingClientRect();
-  
-      // 実際の表示サイズと属性で設定されたサイズの比率を計算
-      const scaleX = canvas.width / rect.width;
-      const scaleY = canvas.height / rect.height;
-  
-      // マウスの座標をCanvasのスケールに合わせて調整
-      const x = (e.clientX - rect.left) * scaleX;
-      const y = (e.clientY - rect.top) * scaleY;
-  
-      setCirclePos({ x, y });
-      console.log("Cicle pos is set to (x, y)", x, y);
+    const canvas = canvasRef.current;
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    const x = (e.clientX - rect.left) * scaleX;
+    const y = (e.clientY - rect.top) * scaleY;
+    if (isRedDragging) {
+      setRedCirclePos({ x, y });
+    }
+    if (isBlueDragging) {
+      setBlueCirclePos({ x, y });
+    }
+    if (isGreenDragging) {
+      setGreenCirclePos({ x, y });
+    }
+    if (isYellowDragging) {
+      setYellowCirclePos({ x, y });
     }
   };
 
   const handleMouseUp = () => {
-    setIsDragging(false);
+    setIsRedDragging(false);
+    setIsBlueDragging(false);
+    setIsGreenDragging(false);
+    setIsYellowDragging(false);
   };
 
   return (
@@ -133,29 +179,29 @@ function ProcessImage() {
           onChange={handleFileChange}
         />
         {activeState == 1 && (
-        <Stack
-          horizontalAlign="center"
-          verticalAlign="center"
-          styles={{
-            root: {
-              width: '100%',
-              minHeight: '200px',
-              border: '1px solid #ccc',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              cursor: 'pointer'
-            }
-          }}
-          onDragOver={handleDragOver}
-          onDrop={handleDrop}
-          onClick={handleClick}
-        >
-          <Text>ドラッグアンドドロップ、またはタップして画像をアップロード</Text>
-        </Stack>
+          <Stack
+            horizontalAlign="center"
+            verticalAlign="center"
+            styles={{
+              root: {
+                width: '100%',
+                minHeight: '200px',
+                border: '1px solid #ccc',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer'
+              }
+            }}
+            onDragOver={handleDragOver}
+            onDrop={handleDrop}
+            onClick={handleClick}
+          >
+            <Text>ドラッグアンドドロップ、またはタップして画像をアップロード</Text>
+          </Stack>
         )}
         <canvas
-          width={2000} 
+          width={2000}
           ref={canvasRef}
           onMouseDown={handleMouseDown}
           onMouseMove={handleMouseMove}
