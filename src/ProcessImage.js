@@ -268,11 +268,11 @@ function ProcessImage() {
           </Stack>
         )}
         <Stack horizontal horizontalAlign="center" tokens={{ childrenGap: 20 }} >
-          {activeState == 2 && (
+          {activeState == 2 && !isInferenceReady && (
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
               <Button
                 onClick={splitImage}
-                disabled={isInferenceReady}
+                // disabled={isInferenceReady}
               >Check</Button>
             </div>
           )}
@@ -280,8 +280,17 @@ function ProcessImage() {
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
               <Button
               onClick={resetImageCircles}
-              disabled={!isInferenceReady}
+              // disabled={!isInferenceReady}
               >Retry</Button>
+            </div>
+          )}
+          {activeState == 2 && isInferenceReady && (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+              <Button
+              appearance='primary'
+              onClick={resetImageCircles}
+              // disabled={!isInferenceReady}
+              >Inference</Button>
             </div>
           )}
         </Stack>
