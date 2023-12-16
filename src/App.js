@@ -9,18 +9,6 @@ import { StateProvider } from './StateContext';
 import { FluentProvider, webLightTheme } from '@fluentui/react-components';
 
 function App() {
-  const [isReady, setIsReady] = useState(false);
-
-  const { cv } = window;
-
-  useEffect(() => {
-    if (cv) {
-      cv['onRuntimeInitialized'] = () => {
-        console.log('OpenCV Ready');
-        setIsReady(true);
-      }
-    }
-  }, []);
 
 
   return (

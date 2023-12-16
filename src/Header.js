@@ -20,8 +20,8 @@ const useStyles = makeStyles({
     flexGrow: 1, // テキスト要素が利用可能なスペースを埋める
   },
   personaStyles : {
-    primaryText: { color: 'white' }, // 名前のテキストの色
-    secondaryText: { color: 'white' } // セカンダリテキストの色
+    // primaryText: { color: 'white' }, // 名前のテキストの色
+    // secondaryText: { color: 'white' } // セカンダリテキストの色
   }
 });
 

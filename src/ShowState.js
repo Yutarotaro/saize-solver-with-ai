@@ -21,7 +21,7 @@ const ShowState = () => {
     fontSize: '12px'
   };
 
-  const messages = ["Upload Image", "Detect Rectangle", "Find the difference"];
+  const messages = ["Upload Image", "Choose Rectangle Area", "Find the difference"];
 
   return (
     <Stack horizontal horizontalAlign="center" tokens={{ childrenGap: 20 }}>

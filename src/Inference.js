@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import * as tf from '@tensorflow/tfjs';
 
 function Inference() {
+  const { cv } = window;
   useEffect(() => {
     let isCanceled = false;
 

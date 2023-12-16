@@ -1,13 +1,14 @@
 import { useState, useRef, useEffect } from 'react';
 import { PrimaryButton, Stack, Text, canUseDOM } from '@fluentui/react';
 import { useStateContext } from './StateContext'; // StateContextのインポート
-import { Button, FluentProvider, webLightTheme } from '@fluentui/react-components';
+import { Button, FluentProvider, MenuList, webLightTheme } from '@fluentui/react-components';
 
 function ProcessImage() {
   const width = 1000;
   const [image, setImage] = useState(null);
   const canvasRef = useRef(null);
   const fileInputRef = useRef(null);
+  const { cv } = window;
 
   const { activeState, setActiveState } = useStateContext();
 
@@ -23,6 +24,10 @@ function ProcessImage() {
   const [yellowCirclePos, setYellowCirclePos] = useState({ x: width / 10, y: width / 2 });
   const [isYellowDragging, setIsYellowDragging] = useState(false);
 
+  const [isInferenceReady, setIsInferenceReady] = useState(false);
+
+  const [srcMat, setSrcMat] = useState(null);
+
 
   // 画像の読み込みと表示
   useEffect(() => {
@@ -35,6 +40,12 @@ function ProcessImage() {
         const canvasHeight = canvas.width * aspectRatio;
         canvas.height = canvasHeight;
         ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        if(srcMat == null){
+          console.log("cv.onRuntimeInitialized",cv.onRuntimeInitialized);
+          const srcMat = cv.matFromImageData(ctx.getImageData(0, 0, canvas.width, canvas.height));
+          setSrcMat(srcMat);
+          console.log(srcMat);
+        }
         setActiveState(2);
 
         // 直線の開始点
@@ -172,6 +183,53 @@ function ProcessImage() {
     setIsYellowDragging(false);
   };
 
+  const calculateHomography = () => {
+    const canvas = canvasRef.current;
+    canvas.height = canvas.width / 2;
+    let srcTri = cv.matFromArray(4, 1, cv.CV_32FC2, [redCirclePos.x, redCirclePos.y, blueCirclePos.x, blueCirclePos.y, greenCirclePos.x, greenCirclePos.y, yellowCirclePos.x, yellowCirclePos.y]); // 変形前の頂点
+    let dstTri = cv.matFromArray(4, 1, cv.CV_32FC2, [0, 0, canvas.width, 0, canvas.width, canvas.height, 0, canvas.height]); // 変形後の頂点
+
+    let M = cv.getPerspectiveTransform(srcTri, dstTri);
+    return M;
+  }
+
+  const splitImage = () => {
+    setIsInferenceReady(true);
+
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext('2d');
+    const homography = calculateHomography();
+
+    // ホモグラフィ変換の適用
+    let dst = new cv.Mat();
+    cv.warpPerspective(srcMat, dst, homography, new cv.Size(canvas.width, canvas.height));
+
+    cv.imshow(canvas, dst);
+
+    let leftImage = new cv.Mat();
+    let leftRect = new cv.Rect(0, 0, canvas.width / 2, canvas.height);
+    leftImage = dst.roi(leftRect);
+    // cv.imshow(canvas, leftImage);
+  }
+
+  const [isReady, setIsReady] = useState(false);
+  
+  useEffect(() => {
+    if (cv) {
+      if (!cv.onRuntimeInitialized) {
+        cv.onRuntimeInitialized = () => {
+          console.log('OpenCV Ready');
+          setIsReady(true);
+        };
+      } else {
+        console.log('OpenCV was already initialized');
+        setIsReady(true);
+      }
+    } else {
+      console.log('cv object is not available');
+    }
+  }, []);
+
   return (
     <div>
       <Stack tokens={{ childrenGap: 20 }} >
@@ -206,17 +264,22 @@ function ProcessImage() {
         )}
         {activeState == 2 && (
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-              <Button >Inference</Button>
+              <Button
+              onClick={splitImage}
+              disabled={isInferenceReady}
+              >Inference</Button>
             </div>
         )}
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
-          <canvas
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+        {/* <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }}> */}
+          <canvas 
             width={width}
             ref={canvasRef}
             onMouseDown={handleMouseDown}
             onMouseMove={handleMouseMove}
             onMouseUp={handleMouseUp}
-            style={{ maxWidth: '100%' }} />
+            //  style={{ maxWidth: '100%' }} 
+          />
         </div>
       </Stack>
     </div>
