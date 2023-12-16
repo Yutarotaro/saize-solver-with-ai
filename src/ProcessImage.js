@@ -40,8 +40,8 @@ function ProcessImage() {
         const canvasHeight = canvas.width * aspectRatio;
         canvas.height = canvasHeight;
         ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-        if(srcMat == null){
-          console.log("cv.onRuntimeInitialized",cv.onRuntimeInitialized);
+        if (srcMat == null) {
+          console.log("cv.onRuntimeInitialized", cv.onRuntimeInitialized);
           const srcMat = cv.matFromImageData(ctx.getImageData(0, 0, canvas.width, canvas.height));
           setSrcMat(srcMat);
           console.log(srcMat);
@@ -74,7 +74,7 @@ function ProcessImage() {
 
         // 線のスタイル設定
         ctx.lineWidth = 3;
-        ctx.strokeStyle = '#000000'; // 黒色で描画
+        ctx.strokeStyle = 'white'; // 黒色で描画
         ctx.stroke(); // 線を描画
 
         drawCircle(ctx, redCirclePos.x, redCirclePos.y, 'red'); // ここで円を描画
@@ -213,7 +213,7 @@ function ProcessImage() {
   }
 
   const [isReady, setIsReady] = useState(false);
-  
+
   useEffect(() => {
     if (cv) {
       if (!cv.onRuntimeInitialized) {
@@ -229,6 +229,11 @@ function ProcessImage() {
       console.log('cv object is not available');
     }
   }, []);
+
+  const resetImageCircles = () => {
+    setIsInferenceReady(false);
+    setRedCirclePos({x: redCirclePos.x-1, y: redCirclePos.y});
+  }
 
   return (
     <div>
@@ -262,23 +267,33 @@ function ProcessImage() {
             <Text>ドラッグアンドドロップ、またはタップして画像をアップロード</Text>
           </Stack>
         )}
-        {activeState == 2 && (
+        <Stack horizontal horizontalAlign="center" tokens={{ childrenGap: 20 }} >
+          {activeState == 2 && (
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
               <Button
-              onClick={splitImage}
-              disabled={isInferenceReady}
-              >Inference</Button>
+                onClick={splitImage}
+                disabled={isInferenceReady}
+              >Check</Button>
             </div>
-        )}
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-        {/* <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }}> */}
-          <canvas 
+          )}
+          {activeState == 2 && isInferenceReady && (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+              <Button
+              onClick={resetImageCircles}
+              disabled={!isInferenceReady}
+              >Retry</Button>
+            </div>
+          )}
+        </Stack>
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          {/* <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }}> */}
+          <canvas
             width={width}
             ref={canvasRef}
             onMouseDown={handleMouseDown}
             onMouseMove={handleMouseMove}
             onMouseUp={handleMouseUp}
-            //  style={{ maxWidth: '100%' }} 
+          //  style={{ maxWidth: '100%' }} 
           />
         </div>
       </Stack>
