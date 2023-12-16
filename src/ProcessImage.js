@@ -39,10 +39,6 @@ function ProcessImage() {
         canvas.height = canvasHeight;
         ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
         setActiveState(2);
-        drawCircle(ctx, redCirclePos.x, redCirclePos.y, 'red'); // ここで円を描画
-        drawCircle(ctx, blueCirclePos.x, blueCirclePos.y, 'blue'); // ここで円を描画
-        drawCircle(ctx, greenCirclePos.x, greenCirclePos.y, 'green'); // ここで円を描画
-        drawCircle(ctx, yellowCirclePos.x, yellowCirclePos.y, 'yellow'); // ここで円を描画
 
         // 直線の開始点
         ctx.beginPath();
@@ -63,12 +59,16 @@ function ProcessImage() {
         ctx.lineTo(redCirclePos.x, redCirclePos.y); // x = 200, y = 200 まで線を描画
 
 
-      //中心線
-      ctx.moveTo((redCirclePos.x + blueCirclePos.x)/2, (redCirclePos.y + blueCirclePos.y)/2); // x = 50, y = 50 の位置に移動
-      // 直線の終了点
-      ctx.lineTo((yellowCirclePos.x + greenCirclePos.x)/2, (yellowCirclePos.y + greenCirclePos.y)/2); // x = 200, y = 200 まで線を描画
+        //中心線
+        ctx.moveTo((redCirclePos.x + blueCirclePos.x) / 2, (redCirclePos.y + blueCirclePos.y) / 2); // x = 50, y = 50 の位置に移動
+        // 直線の終了点
+        ctx.lineTo((yellowCirclePos.x + greenCirclePos.x) / 2, (yellowCirclePos.y + greenCirclePos.y) / 2); // x = 200, y = 200 まで線を描画
 
 
+        drawCircle(ctx, redCirclePos.x, redCirclePos.y, 'red'); // ここで円を描画
+        drawCircle(ctx, blueCirclePos.x, blueCirclePos.y, 'blue'); // ここで円を描画
+        drawCircle(ctx, greenCirclePos.x, greenCirclePos.y, 'green'); // ここで円を描画
+        drawCircle(ctx, yellowCirclePos.x, yellowCirclePos.y, 'yellow'); // ここで円を描画
 
 
         // 線のスタイル設定
