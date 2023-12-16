@@ -6,6 +6,7 @@ import ProcessImage from './ProcessImage';
 import Header from './Header';
 import ShowState from './ShowState';
 import { StateProvider } from './StateContext';
+import { FluentProvider, webLightTheme } from '@fluentui/react-components';
 
 function App() {
   const [isReady, setIsReady] = useState(false);
@@ -23,13 +24,13 @@ function App() {
 
 
   return (
-    <div className="App">
+    <FluentProvider theme={webLightTheme} className="App">
       <Header />
       <StateProvider >
         <ShowState />
         <ProcessImage />
       </StateProvider>
-    </div>
+    </FluentProvider>
   );
 }
 

@@ -29,13 +29,12 @@ const ShowState = () => {
         <Stack key={stateNumber} horizontalAlign="center">
           <DefaultButton
             style={buttonStyle(stateNumber)}
-            // onClick={() => setActiveState(stateNumber)}
+            disabled={true}
           >
             {stateNumber}
           </DefaultButton>
           <Text style={descriptionStyle}>
             {`${messages[stateNumber-1]}`}
-            {/* {`説明文 ${stateNumber}`} */}
           </Text>
         </Stack>
       ))}

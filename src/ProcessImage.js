@@ -1,10 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { PrimaryButton, Stack, Text, canUseDOM } from '@fluentui/react';
 import { useStateContext } from './StateContext'; // StateContextのインポート
-
-class Circle {
-
-}
+import { Button, FluentProvider, webLightTheme } from '@fluentui/react-components';
 
 function ProcessImage() {
   const width = 1000;
@@ -64,17 +61,16 @@ function ProcessImage() {
         // 直線の終了点
         ctx.lineTo((yellowCirclePos.x + greenCirclePos.x) / 2, (yellowCirclePos.y + greenCirclePos.y) / 2); // x = 200, y = 200 まで線を描画
 
+        // 線のスタイル設定
+        ctx.lineWidth = 3;
+        ctx.strokeStyle = '#000000'; // 黒色で描画
+        ctx.stroke(); // 線を描画
 
         drawCircle(ctx, redCirclePos.x, redCirclePos.y, 'red'); // ここで円を描画
         drawCircle(ctx, blueCirclePos.x, blueCirclePos.y, 'blue'); // ここで円を描画
         drawCircle(ctx, greenCirclePos.x, greenCirclePos.y, 'green'); // ここで円を描画
         drawCircle(ctx, yellowCirclePos.x, yellowCirclePos.y, 'yellow'); // ここで円を描画
 
-
-        // 線のスタイル設定
-        ctx.lineWidth = 5;
-        ctx.strokeStyle = '#000000'; // 黒色で描画
-        ctx.stroke(); // 線を描画
       };
       img.src = image;
     }
@@ -207,6 +203,11 @@ function ProcessImage() {
           >
             <Text>ドラッグアンドドロップ、またはタップして画像をアップロード</Text>
           </Stack>
+        )}
+        {activeState == 2 && (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+              <Button >Inference</Button>
+            </div>
         )}
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
           <canvas
