@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { PrimaryButton, Stack, Text, canUseDOM } from '@fluentui/react';
 import { useStateContext } from './StateContext'; // StateContextのインポート
-import { Button, FluentProvider, MenuList, webLightTheme } from '@fluentui/react-components';
+import { Button, FluentProvider, MenuList, Subtitle1, webLightTheme } from '@fluentui/react-components';
 
 function ProcessImage() {
   const width = 1000;
@@ -322,6 +322,12 @@ function ProcessImage() {
             </div>
           )}
         </Stack>
+        {activeState == 2 && isInferenceReady && (
+          <Stack horizontal horizontalAlign="center" tokens={{ childrenGap: 400 }}>
+            <Subtitle1>Left Image</Subtitle1>
+            <Subtitle1>Right Image</Subtitle1>
+          </Stack>
+        )}
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
           {/* <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }}> */}
           <canvas
