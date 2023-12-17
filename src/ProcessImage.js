@@ -206,10 +206,26 @@ function ProcessImage() {
 
     cv.imshow(canvas, dst);
 
+    // Canvasの幅と高さ
+    const width = canvas.width;
+    const height = canvas.height;
+
+    // 縁取りの描画
+    ctx.strokeStyle = 'black';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(0, 0, width, height);
+
+    // 中央の区切り線の描画
+    ctx.beginPath();
+    ctx.moveTo(width / 2, 0);   // 上端の中央から
+    ctx.lineTo(width / 2, height); // 下端の中央まで線を引く
+    ctx.stroke();
+
     let leftImage = new cv.Mat();
     let leftRect = new cv.Rect(0, 0, canvas.width / 2, canvas.height);
     leftImage = dst.roi(leftRect);
     // cv.imshow(canvas, leftImage);
+
   }
 
   const [isReady, setIsReady] = useState(false);
@@ -232,7 +248,7 @@ function ProcessImage() {
 
   const resetImageCircles = () => {
     setIsInferenceReady(false);
-    setRedCirclePos({x: redCirclePos.x-1, y: redCirclePos.y});
+    setRedCirclePos({ x: redCirclePos.x - 1, y: redCirclePos.y });
   }
 
   const useSampleImage = () => {
@@ -251,32 +267,32 @@ function ProcessImage() {
         />
         {activeState == 1 && (
           <div>
-          <Stack
-            horizontalAlign="center"
-            verticalAlign="center"
-            styles={{
-              root: {
-                width: '100%',
-                minHeight: '200px',
-                border: '1px solid #ccc',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                cursor: 'pointer'
-              }
-            }}
-            onDragOver={handleDragOver}
-            onDrop={handleDrop}
-            onClick={handleClick}
-          >
-            <Text>ドラッグアンドドロップ、またはタップして画像をアップロード</Text>
-          </Stack>
-          <br></br>
+            <Stack
+              horizontalAlign="center"
+              verticalAlign="center"
+              styles={{
+                root: {
+                  width: '100%',
+                  minHeight: '200px',
+                  border: '1px solid #ccc',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  cursor: 'pointer'
+                }
+              }}
+              onDragOver={handleDragOver}
+              onDrop={handleDrop}
+              onClick={handleClick}
+            >
+              <Text>ドラッグアンドドロップ、またはタップして画像をアップロード</Text>
+            </Stack>
+            <br></br>
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-          <Button
-           onClick={useSampleImage}
-          >サンプル画像を使う</Button>
-          </div>
+              <Button
+                onClick={useSampleImage}
+              >サンプル画像を使う</Button>
+            </div>
           </div>
         )}
         <Stack horizontal horizontalAlign="center" tokens={{ childrenGap: 20 }} >
@@ -284,14 +300,14 @@ function ProcessImage() {
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
               <Button
                 onClick={splitImage}
-                // disabled={isInferenceReady}
+              // disabled={isInferenceReady}
               >Check</Button>
             </div>
           )}
           {activeState == 2 && isInferenceReady && (
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
               <Button
-              onClick={resetImageCircles}
+                onClick={resetImageCircles}
               // disabled={!isInferenceReady}
               >Retry</Button>
             </div>
@@ -299,8 +315,8 @@ function ProcessImage() {
           {activeState == 2 && isInferenceReady && (
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
               <Button
-              appearance='primary'
-              onClick={resetImageCircles}
+                appearance='primary'
+                onClick={resetImageCircles}
               // disabled={!isInferenceReady}
               >Inference</Button>
             </div>
