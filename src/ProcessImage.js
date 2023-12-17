@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { PrimaryButton, Stack, Text, canUseDOM } from '@fluentui/react';
+import { PrimaryButton, Spinner, Stack, Text, canUseDOM } from '@fluentui/react';
 import { useStateContext } from './StateContext'; // StateContextのインポート
 import { Button, FluentProvider, MenuList, Subtitle1, webLightTheme } from '@fluentui/react-components';
 
@@ -46,7 +46,6 @@ function ProcessImage() {
           setSrcMat(srcMat);
           console.log(srcMat);
         }
-        setActiveState(2);
 
         // 直線の開始点
         ctx.beginPath();
@@ -105,6 +104,7 @@ function ProcessImage() {
 
   const handleFiles = (files) => {
     if (files.length > 0 && files[0].type.startsWith('image/')) {
+      setActiveState(2); 
       setImage(URL.createObjectURL(files[0]));
     }
   };
@@ -252,6 +252,7 @@ function ProcessImage() {
   }
 
   const useSampleImage = () => {
+    setActiveState(2);
     setImage('saize.png');
   }
 
@@ -295,6 +296,7 @@ function ProcessImage() {
             </div>
           </div>
         )}
+        {activeState == 2 && !image && (<Spinner>Loading ...</Spinner>)}
         <Stack horizontal horizontalAlign="center" tokens={{ childrenGap: 20 }} >
           {activeState == 2 && !isInferenceReady && (
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
