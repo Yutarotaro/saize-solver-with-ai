@@ -235,6 +235,10 @@ function ProcessImage() {
     setRedCirclePos({x: redCirclePos.x-1, y: redCirclePos.y});
   }
 
+  const useSampleImage = () => {
+    setImage('saize.png');
+  }
+
   return (
     <div>
       <Stack tokens={{ childrenGap: 20 }} >
@@ -246,6 +250,7 @@ function ProcessImage() {
           onChange={handleFileChange}
         />
         {activeState == 1 && (
+          <div>
           <Stack
             horizontalAlign="center"
             verticalAlign="center"
@@ -266,6 +271,13 @@ function ProcessImage() {
           >
             <Text>ドラッグアンドドロップ、またはタップして画像をアップロード</Text>
           </Stack>
+          <br></br>
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <Button
+           onClick={useSampleImage}
+          >サンプル画像を使う</Button>
+          </div>
+          </div>
         )}
         <Stack horizontal horizontalAlign="center" tokens={{ childrenGap: 20 }} >
           {activeState == 2 && !isInferenceReady && (
